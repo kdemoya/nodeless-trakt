@@ -1,0 +1,27 @@
+{
+    "name": "nodeless-trakt",
+    "version": "1.0.0",
+    "description": "Interact with Trakt.tv API in JavaScript environments without node core libraries (such as React Native)",
+    "keywords": [
+        "trakt",
+        "api",
+        "wrapper",
+        "react",
+        "reactnative",
+        "javascript"
+    ],
+    "main": "trakt.js",
+    "author": "Kelvin De Moya",
+    "license": "MIT",
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/kdemoya/nodeless-trakt"
+    },
+    "bugs": {
+        "url": "https://github.com/kdemoya/nodeless-trakt/issues"
+    },
+    "dependencies": {
+        "random-hexadecimal": "^1.0.3",
+        "sanitizer": "0.x.x"
+    }
+}
