@@ -211,29 +211,27 @@ module.exports = class Trakt {
 
     // Parse trakt response: pagination & stuff
     _parseResponse (method, params, response) {
-        if (!response.body) return response.body;
+        return response.json().then(data => {
+          let parsed = data;
 
-        const data = JSON.parse(response.body);
-        let parsed = data;
+          if (params && params.pagination) {
+              parsed = {
+                  data: data
+              };
 
-        if (params && params.pagination) {
-            parsed = {
-                data: data
-            };
-
-            if (method.opts.pagination) {
-                parsed.pagination = {
-                    'item-count': response.headers['x-pagination-item-count'],
-                    'limit': response.headers['x-pagination-limit'],
-                    'page': response.headers['x-pagination-page'],
-                    'page-count': response.headers['x-pagination-page-count'],
-                };
-            } else {
-                parsed.pagination = false;
-            }
-        }
-
-        return this._sanitize(parsed);
+              if (method.opts.pagination) {
+                  parsed.pagination = {
+                      'item-count': response.headers['x-pagination-item-count'],
+                      'limit': response.headers['x-pagination-limit'],
+                      'page': response.headers['x-pagination-page'],
+                      'page-count': response.headers['x-pagination-page-count'],
+                  };
+              } else {
+                  parsed.pagination = false;
+              }
+          }
+          return this._sanitize(parsed);
+        });
     }
 
     // Sanitize output (xss)
