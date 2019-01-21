@@ -189,20 +189,21 @@ module.exports = class Trakt {
                 'Content-Type': 'application/json',
                 'trakt-api-version': '2',
                 'trakt-api-key': this._settings.client_id
-            },
-            body: (method.body ? Object.assign({}, method.body) : {})
+            }
         };
 
         if (method.opts['auth']) req.headers['Authorization'] = 'Bearer ' + this._authentication.access_token;
 
-        for (let k in params) {
-            if (k in req.body) req.body[k] = params[k];
+        if (method.method !== 'GET' && method.method !== 'HEAD') {
+          req.body = (method.body ? Object.assign({}, method.body) : {});
+          for (let k in params) {
+              if (k in req.body) req.body[k] = params[k];
+          }
+          for (let k in req.body) {
+              if (!req.body[k]) delete req.body[k];
+          }
+          req.body = JSON.stringify(req.body);
         }
-        for (let k in req.body) {
-            if (!req.body[k]) delete req.body[k];
-        }
-
-        req.body = JSON.stringify(req.body);
 
         this._debug(req);
         return fetch(req.url, req).then(response => this._parseResponse(method, params, response));
